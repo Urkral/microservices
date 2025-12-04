@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  product-service:
+    build: ./product-service
+    image: product-service:latest
+    container_name: product-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "7002:7002"
+    #depends_on:
+    # - product-db   DB for later
+
+  review-service:
+    build: ./review-service
+    image: review-service:latest
+    container_name: review-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "7004:7004"
+
+  recommendation-service:
+    build: ./recommendation-service
+    image: recommendation-service:latest
+    container_name: recommendation-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "7003:7003"
+
+  product-composite-service:
+    build: ./product-composite-service
+    image: product-composite-service:latest
+    container_name: product-composite-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "7001:7001"
+    depends_on:
+      - product-service
+      - review-service
+      - recommendation-service
