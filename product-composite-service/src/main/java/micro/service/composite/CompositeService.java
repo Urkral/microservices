@@ -28,7 +28,6 @@ public class CompositeService {
 
     public Map<String, Object> getProductComposite(int productId) {
 
-        // Call 3 microservices and get raw JSON trees
         JsonNode product =
                 restTemplate.getForObject(productServiceUrl, JsonNode.class, productId);
 
