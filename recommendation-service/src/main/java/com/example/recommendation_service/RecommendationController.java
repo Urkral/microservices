@@ -19,7 +19,10 @@ public class RecommendationController {
         this.service = service;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(produces = {
+        MediaType.APPLICATION_JSON_VALUE,
+        MediaType.APPLICATION_NDJSON_VALUE
+    })
     public Flux<Recommendation> getRecommendations(@RequestParam int productId) {
         return service.getRecommendations(productId);
     }
