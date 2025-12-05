@@ -1,36 +1,41 @@
 package application;
 
-import application.Product;
+import application.ProductRepository;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class ProductService {
 
-    private final List<Product> products;
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
 
-    public ProductService() {
-        List<Product> list = new ArrayList<>();
-        list.add(new Product(1, "Tralalero Tralala", 0.25));
-        list.add(new Product(2, "Bombardino Crocodilo", 0.20));
-        list.add(new Product(3, "Tung Tung Tung Sahur", 0.05));
-        this.products = Collections.unmodifiableList(list);
+    public ProductService(ProductRepository repository,
+            ProductMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
     public List<Product> getAllProducts() {
-        return products;
+        List<ProductDocument> docs = repository.findAll();
+        return mapper.documentListToApiList(docs);
     }
 
-    public Optional<Product> getProductById(int productId) {
-        return products.stream()
-                .filter(p -> p.getProductID() == productId)
-                .findFirst();
+    public Optional<Product> getProductById(int id) {
+        return repository.findById(id)
+                .map(mapper::documentToApi);
+    }
+
+    public Product createProduct(Product product) {
+        ProductDocument doc = mapper.apiToDocument(product);
+        ProductDocument saved = repository.save(doc);
+        return mapper.documentToApi(saved);
+    }
+
+    public void deleteProduct(int id) {
+        repository.deleteById(id);
     }
 }

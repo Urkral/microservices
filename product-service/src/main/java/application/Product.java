@@ -2,7 +2,7 @@ package application;
 
 public class Product {
 
-    private int ProductID;
+    private int ProductId;
 
     private String Name;
 
@@ -12,17 +12,17 @@ public class Product {
     }
 
     public Product(int productID, String name, double weight) {
-        this.ProductID = productID;
+        this.ProductId = productID;
         this.Name = name;
         this.Weight = weight;
     }
 
-    public int getProductID() {
-        return ProductID;
+    public int getProductId() {
+        return ProductId;
     }
 
-    public void setProductID(int productID) {
-        this.ProductID = productID;
+    public void setProductId(int productID) {
+        this.ProductId = productID;
     }
 
     public String getName() {
