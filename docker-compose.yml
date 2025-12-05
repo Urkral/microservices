@@ -1,6 +1,14 @@
 version: "3.9"
 
 services:
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
   mongo-product:
     image: mongo:7
     container_name: mongo-product
@@ -82,14 +90,6 @@ services:
       - product-service
       - review-service
       - recommendation-service
-
-  eureka-server:
-    build: ./eureka-server
-    container_name: eureka-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
 
 volumes:
   mysql-review-data:
