@@ -1,33 +1,33 @@
-package micro.service.product;
+package application;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "products")
-public class Product {
+public class ProductDocument {
 
     @Id
-    private Integer productID;
+    private int productId;
 
     private String name;
 
     private double weight;
 
-    public Product() {
+    public ProductDocument() {
     }
 
-    public Product(Integer productID, String name, double weight) {
-        this.productID = productID;
+    public ProductDocument(int productId, String name, double weight) {
+        this.productId = productId;
         this.name = name;
         this.weight = weight;
     }
 
-    public Integer getProductID() {
-        return productID;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProductID(Integer productID) {
-        this.productID = productID;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
