@@ -12,14 +12,32 @@ services:
     #depends_on:
     # - product-db   DB for later
 
+  mysql-review:
+    image: mysql:8.0
+    container_name: mysql-review
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=reviews
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-review-data:/var/lib/mysql
+
   review-service:
     build: ./review-service
     image: review-service:latest
     container_name: review-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - MYSQL_DATABASE=reviews
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "7004:7004"
+    depends_on:
+      - mysql-review
 
   recommendation-service:
     build: ./recommendation-service
@@ -42,3 +60,6 @@ services:
       - product-service
       - review-service
       - recommendation-service
+
+volumes:
+  mysql-review-data:

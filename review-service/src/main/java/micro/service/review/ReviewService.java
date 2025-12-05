@@ -1,6 +1,9 @@
 package micro.service.review;
 
 import micro.service.review.Review;
+import micro.service.review.ReviewEntity;
+import micro.service.review.ReviewMapper;
+import micro.service.review.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,25 +13,41 @@ import java.util.stream.Collectors;
 @Service
 public class ReviewService {
 
-    private final List<Review> reviews = List.of(
-            new Review(1L, 101L, "Ritchie", "Amazing product", "A fucking masterpiece and best thing created since drunk driving."),
-            new Review(1L, 102L, "Boberito Estebanito", "Pretty good", "I gooned three times in a row in front of this product."),
-            new Review(2L, 201L, "Collepat Kepat Prekupat Kupat Kepet Kupot", "Not bad", "Works fine on my DragonOS_Noble_R7.iso")
-    );
+    private final ReviewRepository repository;
+    private final ReviewMapper mapper;
+
+    public ReviewService(ReviewRepository repository, ReviewMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     public List<Review> getAllReviews() {
-        return reviews;
+        return mapper.entityListToApiList(repository.findAll());
     }
 
     public Optional<Review> getReviewById(Long reviewId) {
-        return reviews.stream()
-                .filter(r -> r.getReviewId().equals(reviewId))
-                .findFirst();
+        return repository.findById(reviewId)
+                .map(mapper::entityToApi);
     }
 
     public List<Review> getReviewsByProductId(Long productId) {
-        return reviews.stream()
-                .filter(r -> r.getProductId().equals(productId))
-                .collect(Collectors.toList());
+        List<ReviewEntity> entities = repository.findByProductId(productId);
+        return mapper.entityListToApiList(entities);
+    }
+
+    public Review createReview(Review review) {
+        ReviewEntity entity = mapper.apiToEntity(review);
+        // ignore client-sent reviewId, let DB assign if null
+        entity.setReviewId(null);
+        ReviewEntity saved = repository.save(entity);
+        return mapper.entityToApi(saved);
+    }
+
+    public void deleteReview(Long reviewId) {
+        repository.deleteById(reviewId);
+    }
+
+    public void deleteReviewsByProductId(Long productId) {
+        repository.deleteByProductId(productId);
     }
 }
