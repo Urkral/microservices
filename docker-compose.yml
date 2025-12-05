@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   product-service:
     build: ./product-service
@@ -11,6 +9,16 @@ services:
       - "7002:7002"
     #depends_on:
     # - product-db   DB for later
+
+  product-service-mongodb:
+    image: mongo:8
+    container_name: product-service-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: brimbrimpatapim
+      MONGO_INITDB_ROOT_PASSWORD: bombardinocrocodilo
+    ports:
+      - "127.0.0.1:27021:27017"
 
   review-service:
     build: ./review-service
