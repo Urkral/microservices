@@ -39,12 +39,28 @@ services:
     depends_on:
       - mysql-review
 
+  mariadb-recommendation:
+    image: mariadb:11
+    container_name: mariadb-recommendation
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MARIADB_DATABASE: recommendations
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mariadb-recommendation-data:/var/lib/mysql
+
   recommendation-service:
     build: ./recommendation-service
     image: recommendation-service:latest
     container_name: recommendation-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - MARIADB_DATABASE=recommendations
+      - MARIADB_USER=${MYSQL_USER}
+      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "7003:7003"
 
@@ -63,3 +79,4 @@ services:
 
 volumes:
   mysql-review-data:
+  mariadb-recommendation-data:
