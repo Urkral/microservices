@@ -15,9 +15,9 @@ public class CompositeService {
     private final RestTemplate restTemplate;
     private final WebClient webClient;
 
-    private static final String PRODUCT_SERVICE_URL = "http://product-service/product/{id}";
-    private static final String REVIEW_SERVICE_URL = "http://review-service/reviews/product/{productId}";
-    private static final String RECOMMENDATION_SERVICE_URL = "http://recommendation-service/recommendation?productId={productId}";
+    private static final String PRODUCT_SERVICE_URL = "http://product-service";
+    private static final String REVIEW_SERVICE_URL = "http://review-service";
+    private static final String RECOMMENDATION_SERVICE_URL = "http://recommendation-service";
 
     public CompositeService(WebClient.Builder webClientBuilder, RestTemplate restTemplate) {
         this.webClient = webClientBuilder.build();
@@ -31,13 +31,13 @@ public class CompositeService {
     public Map<String, Object> getProductComposite(int productId) {
 
         JsonNode product = restTemplate.getForObject(
-                PRODUCT_SERVICE_URL, JsonNode.class, productId);
+                PRODUCT_SERVICE_URL + "/product/{id}", JsonNode.class, productId);
 
         JsonNode reviews = restTemplate.getForObject(
-                REVIEW_SERVICE_URL, JsonNode.class, productId);
+                REVIEW_SERVICE_URL + "/reviews/product/{productId}", JsonNode.class, productId);
 
         JsonNode recommendations = restTemplate.getForObject(
-                RECOMMENDATION_SERVICE_URL, JsonNode.class, productId);
+                RECOMMENDATION_SERVICE_URL + "/recommendation?productId={productId}", JsonNode.class, productId);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("product", product);

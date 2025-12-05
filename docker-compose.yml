@@ -19,15 +19,13 @@ services:
   product-service:
     build: ./product-service
     image: product-service:latest
-    container_name: product-service
+    #container_name: product-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - mongo-product
-    ports:
-      - "7002:7002"
-    #depends_on:
-    # - product-db   DB for later
+    #ports:
+    #  - "7002:7002"
 
   mysql-review:
     image: mysql:8.0
@@ -45,14 +43,14 @@ services:
   review-service:
     build: ./review-service
     image: review-service:latest
-    container_name: review-service
+    #container_name: review-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - MYSQL_DATABASE=reviews
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - "7004:7004"
+    #ports:
+    #  - "7004:7004"
     depends_on:
       - mysql-review
 
@@ -67,7 +65,7 @@ services:
   recommendation-service:
     build: ./recommendation-service
     image: recommendation-service:latest
-    container_name: recommendation-service
+    #container_name: recommendation-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - MARIADB_DATABASE=recommendations
@@ -75,8 +73,8 @@ services:
       - MARIADB_PASSWORD=${MYSQL_PASSWORD}
     depends_on:
       - mongo-recommendation
-    ports:
-      - "7003:7003"
+    #ports:
+    #  - "7003:7003"
 
   product-composite-service:
     build: ./product-composite-service
