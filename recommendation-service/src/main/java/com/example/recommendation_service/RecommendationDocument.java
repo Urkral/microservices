@@ -1,12 +1,10 @@
 package com.example.recommendation_service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "recommendations")
-public class RecommendationEntity {
+@Document(collection = "recommendations")
+public class RecommendationDocument {
 
     @Id
     private int recommendationId;
@@ -19,10 +17,10 @@ public class RecommendationEntity {
 
     private String content;
 
-    public RecommendationEntity() {
+    public RecommendationDocument() {
     }
 
-    public RecommendationEntity(int recommendationId, int productId,
+    public RecommendationDocument(int recommendationId, int productId,
             String author, int rate, String content) {
         this.recommendationId = recommendationId;
         this.productId = productId;

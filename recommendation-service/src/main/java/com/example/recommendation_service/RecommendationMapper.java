@@ -1,7 +1,7 @@
 package com.example.recommendation_service;
 
 import com.example.recommendation_service.Recommendation;
-import com.example.recommendation_service.RecommendationEntity;
+import com.example.recommendation_service.RecommendationDocument;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RecommendationMapper {
 
-    Recommendation entityToApi(RecommendationEntity entity);
+    Recommendation documentToApi(RecommendationDocument doc);
 
-    RecommendationEntity apiToEntity(Recommendation api);
+    RecommendationDocument apiToDocument(Recommendation api);
 
-    List<Recommendation> entityListToApiList(List<RecommendationEntity> entities);
+    List<Recommendation> documentListToApiList(List<RecommendationDocument> docs);
 }

@@ -39,18 +39,13 @@ services:
     depends_on:
       - mysql-review
 
-  mariadb-recommendation:
-    image: mariadb:11
-    container_name: mariadb-recommendation
-    environment:
-      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MARIADB_DATABASE: recommendations
-      MARIADB_USER: ${MYSQL_USER}
-      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+  mongo-recommendation:
+    image: mongo:7
+    container_name: mongo-recommendation
     ports:
-      - "3308:3306"
+      - "27018:27017"
     volumes:
-      - mariadb-recommendation-data:/var/lib/mysql
+      - mongo-recommendation-data:/data/db
 
   recommendation-service:
     build: ./recommendation-service
@@ -61,6 +56,8 @@ services:
       - MARIADB_DATABASE=recommendations
       - MARIADB_USER=${MYSQL_USER}
       - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+    depends_on:
+      - mongo-recommendation
     ports:
       - "7003:7003"
 
@@ -79,4 +76,4 @@ services:
 
 volumes:
   mysql-review-data:
-  mariadb-recommendation-data:
+  mongo-recommendation-data:
