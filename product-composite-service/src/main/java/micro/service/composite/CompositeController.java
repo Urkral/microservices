@@ -43,6 +43,7 @@ public class CompositeController {
             @RequestBody ObjectNode recommendationPayload) {
 
         JsonNode created = compositeService.createRecommendation(productId, recommendationPayload);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }

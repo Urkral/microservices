@@ -58,14 +58,15 @@ public class CompositeService {
     }
 
     public JsonNode createRecommendation(int productId, ObjectNode recommendationPayload) {
-        // Force the right productId
-        recommendationPayload.put("productId", productId);
+        // Ensure client cannot override productId
+        recommendationPayload.remove("productId");
 
-        String url = RECOMMENDATION_SERVICE_URL + "/recommendation";
+        String url = RECOMMENDATION_SERVICE_URL + "/recommendation/product/{productId}";
 
         return restTemplate.postForObject(
                 url,
                 recommendationPayload,
-                JsonNode.class);
+                JsonNode.class,
+                productId);
     }
 }

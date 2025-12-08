@@ -24,8 +24,13 @@ public class RecommendationController {
         return service.getRecommendations(productId);
     }
 
-    @PostMapping
-    public Mono<Recommendation> createRecommendation(@RequestBody Recommendation body) {
+    @PostMapping("/product/{productId}")
+    public Mono<Recommendation> createRecommendationForProduct(
+            @PathVariable int productId,
+            @RequestBody Recommendation body) {
+
+        // force productId from path
+        body.setProductId(productId);
         return service.createRecommendation(body);
     }
 
