@@ -39,9 +39,11 @@ public class ReviewController {
     }
 
     // POST /reviews -> create a review
-    @PostMapping
-    public Review createReview(@RequestBody Review review) {
-        return reviewService.createReview(review);
+    @PostMapping("/product/{productId}")
+    public Review createReview(
+            @PathVariable Long productId,
+            @RequestBody Review review) {
+        return reviewService.createReview(productId, review);
     }
 
     // DELETE /reviews/{reviewId} -> delete single review

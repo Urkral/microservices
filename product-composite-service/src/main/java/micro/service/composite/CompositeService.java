@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,5 +49,23 @@ public class CompositeService {
         result.put("recommendations", recommendations);
 
         return result;
+    }
+
+    public JsonNode createReview(int productId, ObjectNode reviewPayload) {
+        reviewPayload.remove("productId");
+        String url = REVIEW_SERVICE_URL + "/reviews/product/{productId}";
+        return restTemplate.postForObject(url, reviewPayload, JsonNode.class, productId);
+    }
+
+    public JsonNode createRecommendation(int productId, ObjectNode recommendationPayload) {
+        // Force the right productId
+        recommendationPayload.put("productId", productId);
+
+        String url = RECOMMENDATION_SERVICE_URL + "/recommendation";
+
+        return restTemplate.postForObject(
+                url,
+                recommendationPayload,
+                JsonNode.class);
     }
 }

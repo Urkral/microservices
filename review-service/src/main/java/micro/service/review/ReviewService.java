@@ -35,10 +35,14 @@ public class ReviewService {
         return mapper.entityListToApiList(entities);
     }
 
-    public Review createReview(Review review) {
+    public Review createReview(Long productId, Review review) {
         ReviewEntity entity = mapper.apiToEntity(review);
-        // ignore client-sent reviewId, let DB assign if null
-        entity.setReviewId(null);
+
+        // THIS is the important line:
+        entity.setProductId(productId); // not setReviewId, not forgotten
+
+        System.out.println("entity.productId is " + entity.getProductId());
+
         ReviewEntity saved = repository.save(entity);
         return mapper.entityToApi(saved);
     }
